@@ -2,7 +2,7 @@ package methods;
 
 public class LearnMethods {
     public static void main(String[] args) {
-        System.out.println(args[0]);
+      System.out.println(args[0]);
         for(String arg:args){
             System.out.println(arg);
         }

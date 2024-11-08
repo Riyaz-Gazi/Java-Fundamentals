@@ -7,6 +7,9 @@ public class LearnEncapsulation {
     public static void printHello(){
         System.out.println("Hello");
     }
+    {
+        System.out.println("Normal Block");
+    }
 
     static {
         System.out.println("Called from the static block");
