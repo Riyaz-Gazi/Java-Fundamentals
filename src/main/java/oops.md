@@ -723,3 +723,321 @@ public class Main {
 
 
 # Exceptions
+Exception is an unexpected event that occurs during program executions. When an exception occurs, Java generates an exception object, which is then thrown and can be caught and handled by the program. If not handled, it may cause the program to terminate.
+Java exceptions are divided mainly into three categories:
+
+### Checked Exceptions (Compile-time Exceptions)
+- These are exceptions that must be either handled with a try-catch block or declared with a throws clause. They are checked at compile time.
+- Examples include IOException, SQLException, and FileNotFoundException.
+
+### Unchecked Exceptions (Runtime Exceptions)
+- These exceptions are not checked at compile time. They occur at runtime and can be avoided by proper coding practices.
+- Examples include NullPointerException, ArrayIndexOutOfBoundsException, and ArithmeticException.
+- They inherit from RuntimeException.
+
+### Errors
+- Errors are serious issues that a program typically cannot recover from. They usually indicate underlying system problems, such as memory exhaustion.
+- Examples include StackOverflowError and OutOfMemoryError.
+- They inherit from Error rather than Exception and should generally not be handled by application code.
+
+## Handling Exceptions
+Java provides a robust exception-handling mechanism through the following keywords:
+
+- try - Code that may throw an exception is placed in the try block.
+- catch - This block catches and handles exceptions thrown by the try block. You can catch specific exception types or use a general Exception type.
+- finally - A block that executes after the try and catch blocks, regardless of whether an exception was thrown. It’s typically used for cleanup actions like closing resources.
+- throws - Used in method declarations to specify that a method can throw particular exceptions.
+- throw - Used to explicitly throw an exception.
+- Using e.printStackTrace() is especially useful for identifying where the exception occurred and the series of calls that led up to it.
+
+
+### Code Example
+
+```java
+public class ExceptionExample {
+    public static void main(String[] args) {
+        try {
+            int divideByZero = 5 / 0; // Will cause ArithmeticException
+        } catch (ArithmeticException e) {
+            System.out.println("Cannot divide by zero.");
+        } finally {
+            System.out.println("Finally block executed.");
+        }
+    }
+}
+```
+
+### IO Exceptions
+- Definition: IOException is a checked exception that occurs during input/output (I/O) operations, typically involving files, networks, or data streams.
+- Package: It is part of the java.io package and serves as a superclass for more specific I/O-related exceptions.
+- Checked Exception: As a checked exception, IOException must be either caught using a try-catch block or declared in the method signature with throws.
+
+### Code Example
+
+```java
+public class IOExceptions {
+    public static void main(String[] args) {
+        try {
+            File file = new File("text.txt");
+            FileInputStream fileInputStream = new FileInputStream(file);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+}
+```
+
+```java
+public class IOExceptions {
+    public static void main(String[] args) throws IOException {
+        File file = new File("text.txt");
+        FileInputStream fileInputStream = new FileInputStream(file);
+    }
+}
+```
+
+### throws vs throw
+
+In Java, both throw and throws are used for exception handling, but they serve different purposes:
+- throw: Used to explicitly throw an exception from a method or a block of code.
+- throws: Used in a method signature to declare that the method can throw exceptions, allowing the caller to handle them.
+
+
+```java
+public class ThrowExample {
+    
+    public static void main(String[] args) {
+        try {
+            checkAge(15); // Passing an invalid age
+        } catch (IllegalArgumentException e) {
+            System.out.println("Exception caught: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // Method that throws an exception explicitly
+    public static void checkAge(int age) {
+        if (age < 18) {
+            // Throwing an exception if age is less than 18
+            throw new IllegalArgumentException("Age must be 18 or older.");
+        } else {
+            System.out.println("Age is valid.");
+        }
+    }
+}
+
+```
+
+### Customs Exceptions
+
+In Java, custom exceptions (also known as user-defined exceptions) are exceptions that you create to handle specific error conditions that are not covered by standard Java exceptions.
+
+```java
+package exception;
+
+class InsufficientBalanceExceptions extends Exception{
+    public InsufficientBalanceExceptions(String message) {
+        super(message);
+    }
+}
+
+class BankAccount{
+    double balance;
+    BankAccount(double balance){
+        this.balance = balance;
+    }
+
+    public void withdraw(double amount) throws InsufficientBalanceExceptions {
+        if(amount>balance){
+            throw new InsufficientBalanceExceptions("Balance is insufficient  and the current balance is "+balance);
+        }else{
+            balance-=amount;
+            System.out.println("Amount debited successfully and the current balance is "+ balance);
+        }
+    }
+}
+public class LearnCustomsExceptions {
+    public static void main(String[] args) throws InsufficientBalanceExceptions {
+        BankAccount icici = new BankAccount(1000.0);
+        try{
+        icici.withdraw(10000);
+        }catch (InsufficientBalanceExceptions e){
+            System.out.println(e.getMessage());
+        }finally {
+            System.out.println("Always Execute");
+        }
+    }
+}
+
+```
+
+
+# Wrapper Class
+
+In Java, wrapper classes are classes that provide a way to use primitive data types (int, double, char, etc.) as objects. Each primitive type has a corresponding wrapper class in Java, which allows primitives to be treated as objects when necessary.
+
+#### Converting Primitive to Wrapper (Boxing)
+You can convert a primitive type to its corresponding wrapper class object (boxing) manually or through autoboxing, which Java does automatically when required.
+
+### Code Example
+
+```agsl
+int num = 5;
+Integer wrappedNum = Integer.valueOf(num); // Boxing manually
+Integer autoWrappedNum = num;              // Autoboxing automatically
+
+```
+
+### Converting Wrapper to Primitive (Unboxing)
+You can convert a wrapper class object back to a primitive type (unboxing) manually or through auto-unboxing.
+
+### Code Example
+```agsl
+Integer wrappedNum = 5;
+int num = wrappedNum.intValue(); // Unboxing manually
+int autoNum = wrappedNum;        // Auto-unboxing automatically
+
+```
+
+## Key Benefits of Wrapper Classes
+### Collection Compatibility: 
+- Collections in Java only work with objects, not primitives, so wrapper classes enable the storage of primitive types in collections.
+### Utility Functions: 
+- Wrapper classes offer useful methods for conversion, parsing, and checking value ranges.
+### Autoboxing and Unboxing:
+- Java automatically handles conversions between primitives and wrapper objects, simplifying code.
+
+# Generics
+
+Generics means parameterized types. Using Generics , it is possible to create classes that work with different data types . An entity such as class , interface , or method that operates on a parameterized type is a generic entity.
+
+## Java Generics Class
+
+### Code Example - 1
+
+```java
+class Dog<T>{
+    T name;
+    Dog(T name){
+        this.name = name;
+    }
+
+    T getName(){
+        return name;
+    }
+}
+
+public class LearnGenerics {
+    public static void main(String[] args) {
+        Dog dog1 = new Dog("Tommy");
+        Dog dog2 = new Dog(123);
+    }
+}
+
+```
+
+### Code Example - 2
+
+```java
+public class LearnGenerics {
+    public static void main(String[] args) {
+        Dog<String,Integer> d1 = new Dog<>("12",3);
+        Dog<Integer,String> d2 = new Dog<>(2,"Riyaz");
+        System.out.println(d1.getId());
+
+    }
+}
+class Dog<E,V>{
+    E id;
+
+    V name;
+
+    public Dog(E id,V name){
+        this.id=id;
+        this.name = name;
+    }
+
+    E getId(){
+        return id;
+    }
+}
+```
+
+## Java Generics Methods
+
+Generics method is similar to generics class , where we parameterized the methods . 
+
+### Code Example
+
+```java
+public class LearnGenericMethods {
+    static <E> void printData(E data) {
+        System.out.println(data);
+    }
+
+    public static void main(String[] args) {
+        printData("Hello");
+        printData(123);
+    }
+}
+```
+
+
+## Bounded Type Parameters
+
+You can restrict the types that can be used as generic parameters using bounded type parameters. This allows you to define constraints on the types that can be used.
+
+### Code Example
+
+```java
+public class LearnGenericMethods {
+    // Supports only number class
+    static <E extends Number> void printData(E data) {
+        System.out.println(data);
+    }
+
+    public static void main(String[] args) {
+        printData(123);
+    }
+}
+```
+
+
+## Inner classes vs outer classes
+In Java, an inner class is a class defined within another class. Inner classes are useful when a class is strongly associated with another class and only exists within the scope of that class. By defining inner classes, you can logically group classes that are only used in one place, making your code more readable and easier to maintain.
+
+```java
+class OuterClass {
+    private String message = "Hello from Outer Class";
+
+    // Member Inner Class
+    class InnerClass {
+        public void displayMessage() {
+            System.out.println(message); // Accessing outer class's private field
+        }
+    }
+
+    public void createInner() {
+        InnerClass inner = new InnerClass();
+        inner.displayMessage();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        OuterClass outer = new OuterClass();
+        outer.createInner();
+
+        // Alternative way to create an instance of InnerClass
+        OuterClass.InnerClass inner = outer.new InnerClass();
+        inner.displayMessage();
+    }
+}
+
+```
+
+- output :
+```agsl
+Hello from Outer Class
+Hello from Outer Class
+```

@@ -1,11 +1,11 @@
 package genericsandwrapperclass;
 
 public class LearnGenericsMethod {
-    static<E> void printData(E data){
+    static <E> void printData(E data) {
         System.out.println(data);
     }
 
-    <E extends Number> void doubleData(E data){
+    <E extends Number> void doubleData(E data) {
         System.out.println(data);
     }
 
@@ -22,6 +22,6 @@ public class LearnGenericsMethod {
 }
 
 
-class CustomClass{
+class CustomClass {
 
 }

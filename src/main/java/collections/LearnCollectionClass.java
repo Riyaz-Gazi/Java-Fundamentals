@@ -32,11 +32,13 @@ public class LearnCollectionClass {
         Student s3 = new Student(67,"Mehak");
         Student s4 = new Student(22,"Priyanka");
 
-        List<Student> students = List.of(s1,s2,s3,s4);
+        List<Student> students = new ArrayList<>(List.of(s1,s2,s3,s4));
         System.out.println(students);
 //        Collections.sort(students);
 
         System.out.println(s1.compareTo(s2));
+        System.out.println(students);
+
 
 
     }

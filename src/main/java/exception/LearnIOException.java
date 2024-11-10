@@ -8,6 +8,7 @@ public class LearnIOException {
     public static void main(String[] args) throws IOException {
         File file  = new File("text.txt");
         FileInputStream stream = new FileInputStream(file);
+
     }
 }
 
