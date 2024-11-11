@@ -1041,3 +1041,420 @@ public class Main {
 Hello from Outer Class
 Hello from Outer Class
 ```
+
+## Anonymous class
+- Java anonymous inner class is an inner class without a name and for which only a single object is created.
+- Typically used to define a one-off implementation of an interface or extend an abstract class.
+
+```java
+interface Greetable {
+    void greet();
+}
+
+public class AnonymousClassExample {
+    public static void main(String[] args) {
+        // Creating an anonymous class that implements the Greetable interface
+        Greetable greeter = new Greetable() {
+            @Override
+            public void greet() {
+                System.out.println("Hello from the anonymous class!");
+            }
+        };
+        
+        greeter.greet();  // Output: Hello from the anonymous class!
+    }
+}
+
+```
+
+```java
+abstract class Animal {
+    abstract void sound();
+}
+
+public class AnonymousClassExample2 {
+    public static void main(String[] args) {
+        // Creating an anonymous class that extends the Animal class
+        Animal dog = new Animal() {
+            @Override
+            public void sound() {
+                System.out.println("Woof!");
+            }
+        };
+
+        dog.sound();  // Output: Woof!
+    }
+}
+
+```
+
+## Functional Interface
+A functional interface in Java is an interface with exactly one abstract method. 
+
+### Key Point 
+-  functional interface can have only one abstract method.
+- It can have multiple default or static methods (since Java 8).
+- The @FunctionalInterface annotation is optional but recommended because it helps the compiler enforce the single abstract method rule.
+
+```java
+@FunctionalInterface
+interface Calculator {
+    int calculate(int a, int b);
+
+    default void defaultMethod() {
+        System.out.println("default method in functional interface");
+    }
+
+    static void staticMethod() {
+        System.out.println("static method in functional interface");
+    }
+}
+
+
+public class LearnFunctionalInterface {
+    public static void main(String[] args) {
+        Calculator add = (a, b) -> a + b;
+        Calculator multiply = (a, b) -> a * b;
+
+        System.out.println(add.calculate(3, 4));
+        System.out.println(multiply.calculate(3, 4));
+
+        // Call Static methods using interface name
+        Calculator.staticMethod();
+    }
+}
+```
+
+## Equals & hashcode
+In Java, when you override the equals method, you should also override the hashCode method to maintain the general contract between the two methods. The general contract states that if two objects are considered equal by the equals method, they must also have the same hash code.
+
+```java
+import java.util.Objects;
+
+public class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // Override equals method
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // Check if they are the same object
+        if (obj == null || getClass() != obj.getClass()) return false; // Check if the object is of the same class
+
+        Person person = (Person) obj; // Cast to Person
+        return age == person.age && Objects.equals(name, person.name); // Compare fields
+    }
+
+    // Override hashCode method
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age); // Generate hash code based on fields
+    }
+
+    public static void main(String[] args) {
+        Person p1 = new Person("Alice", 30);
+        Person p2 = new Person("Alice", 30);
+        Person p3 = new Person("Bob", 25);
+
+        System.out.println("p1 equals p2: " + p1.equals(p2)); // true
+        System.out.println("p1 equals p3: " + p1.equals(p3)); // false
+        System.out.println("p1 hashCode: " + p1.hashCode());
+        System.out.println("p2 hashCode: " + p2.hashCode());
+        System.out.println("p3 hashCode: " + p3.hashCode());
+    }
+}
+
+```
+
+##### output 
+
+```agsl
+p1 equals p2: true
+p1 equals p3: false
+p1 hashCode: 1668846766
+p2 hashCode: 1668846766
+p3 hashCode: 144900796
+
+```
+
+# Comparable and Comparator
+
+- To sort objects like Student or Employee , we need to provide explicit sorting logic.
+- To achieve this , java provides the Comparable and Comparator interfaces.
+- Comparable and Comparator in java allows us to define custom sorting behavior for objects , including sorting based on multiple data members.
+
+
+## Comparable interface
+
+ - This interface contains only one method named compareTo(Object) .
+ - It provides a single sorting sequence only , i.e. you can sort the element on the basis of single data member only.
+ - For example , it may be rollNo , name , age or anything else.
+
+### public int compareTo(Object obj) : 
+- it is used to compare the current object with the specified objects.
+- it returns,
+- positive : if the current objects is greater than the specified object.
+- negative : if the current objects is less than the specified object.
+- zero : if the current object is equal to the specified object.
+
+
+### Code Example
+
+```java
+package comparable;
+
+public class Animal implements Comparable<Animal>{
+    int age;
+    String name;
+    int weight;
+
+    public Animal(int age, String name, int weight) {
+        this.age = age;
+        this.name = name;
+        this.weight = weight;
+    }
+
+    @Override
+    public String toString() {
+        return "Animal{" +
+                "age=" + age +
+                ", name='" + name + '\'' +
+                ", weight=" + weight +
+                '}' + "\n";
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+
+    @Override
+    public int compareTo(Animal o) {
+        if(this.age == o.age){
+            return this.name.compareTo(o.name);
+        }
+        return this.age - o.age;
+    }
+}
+
+
+```
+
+```java
+public class LearnComparable {
+    public static void main(String[] args) {
+        Animal a1 = new Animal(2, "Leo", 10);
+        Animal a2 = new Animal(2, "Bruno", 4);
+        Animal a3 = new Animal(2, "Maxo", 6);
+        Animal a4 = new Animal(3, "Don", 3);
+
+        List<Animal> dogs = new ArrayList<>();
+        dogs.add(a1);
+        dogs.add(a2);
+        dogs.add(a3);
+        dogs.add(a4);
+
+        System.out.println(dogs);
+        Collections.sort(dogs);
+        System.out.println(dogs);
+    }
+}
+
+```
+
+#### output:
+
+```agsl
+// Before sorting
+[Animal{age=2, name='Leo', weight=10}
+, Animal{age=2, name='Bruno', weight=4}
+, Animal{age=2, name='Maxo', weight=6}
+, Animal{age=3, name='Don', weight=3}
+]
+// After Sorting
+[Animal{age=2, name='Bruno', weight=4}
+, Animal{age=2, name='Leo', weight=10}
+, Animal{age=2, name='Maxo', weight=6}
+, Animal{age=3, name='Don', weight=3}
+]
+```
+
+## Comparator interfaces
+
+### Code Example
+
+```java
+public class Animal {
+    int age;
+    String name;
+    int weight;
+
+    public Animal(int age, String name, int weight) {
+        this.age = age;
+        this.name = name;
+        this.weight = weight;
+    }
+
+    @Override
+    public String toString() {
+        return "Animal{" +
+                "age=" + age +
+                ", name='" + name + '\'' +
+                ", weight=" + weight +
+                '}' + "\n";
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+}
+
+```
+
+```java
+class CustomDogComparator implements Comparator<Animal> {
+
+    @Override
+    public int compare(Animal o1, Animal o2) {
+        return o1.age - o2.age;
+
+    }
+}
+
+public class LearnComparators {
+    public static void main(String[] args) {
+        Animal a1 = new Animal(2, "Leo", 10);
+        Animal a2 = new Animal(2, "Bruno", 4);
+        Animal a3 = new Animal(2, "Maxo", 6);
+        Animal a4 = new Animal(3, "Don", 3);
+
+        List<Animal> dogs = Arrays.asList(a1, a2, a3, a4);
+
+        System.out.println(dogs);
+
+        Collections.sort(dogs, new CustomDogComparator());
+
+      System.out.println(dogs);
+    }
+}
+```
+
+### Method - 1 
+
+```java
+    Collections.sort(dogs, new CustomDogComparator());
+```
+
+### Method - 2
+```java
+        Collections.sort(dogs, new Comparator<Animal>() {
+            @Override
+            public int compare(Animal o1, Animal o2) {
+                return o1.name.compareTo(o2.name);
+            }
+        });
+```
+
+### Method - 3
+```java
+Collections.sort(dogs, (o1, o2) -> {
+            return Integer.compare(o1.age, o2.age);
+        });
+```
+
+### Method - 4
+
+```java
+Collections.sort(dogs,Comparator.comparing(Animal::getAge));
+
+```
+
+
+#####  Sort a product with respect to age , price , weight , name
+
+```java
+import java.util.*;
+
+class Product {
+    int age;
+    double price;
+    double weight;
+    String name;
+
+    Product(int age, double price, double weight, String name) {
+        this.age = age;
+        this.price = price;
+        this.weight = weight;
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return name + " (Age: " + age + ", Price: " + price + ", Weight: " + weight + ")";
+    }
+}
+
+public class MultiCriteriaSort {
+    public static void main(String[] args) {
+        // List of products
+        List<Product> products = Arrays.asList(
+                new Product(10, 50.5, 15.2, "Product A"),
+                new Product(5, 25.0, 10.1, "Product B"),
+                new Product(10, 60.0, 12.5, "Product C"),
+                new Product(8, 40.0, 20.5, "Product D"),
+                new Product(5, 30.0, 10.1, "Product E")
+        );
+
+        // Comparator to sort by age, then by price, then by weight, and then by name
+        Comparator<Product> byAge = Comparator.comparingInt(Product::getAge);
+        Comparator<Product> byPrice = Comparator.comparingDouble(Product::getPrice);
+        Comparator<Product> byWeight = Comparator.comparingDouble(Product::getWeight);
+        Comparator<Product> byName = Comparator.comparing(Product::getName);
+
+        // Sorting by age, then price, then weight, then name
+        products.sort(byAge.thenComparing(byPrice).thenComparing(byWeight).thenComparing(byName));
+
+        // Output the sorted list
+        products.forEach(System.out::println);
+    }
+}
+
+```
